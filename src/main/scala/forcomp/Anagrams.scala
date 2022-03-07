@@ -88,7 +88,15 @@ object Anagrams extends AnagramsInterface:
    *  Note that the order of the occurrence list subsets does not matter -- the subsets
    *  in the example above could have been displayed in some other order.
    */
-  def combinations(occurrences: Occurrences): List[Occurrences] = ???
+  //todo generate all possibilities from new occurence
+  def combinations(occurrences: Occurrences): List[Occurrences] = {
+
+    def genPossibles(c: Char, nc: Int): List[List[(Char, Int)]] =
+      (for (i <- 1 to nc) yield (c, i)).toList.map(x=>List(x))
+
+    if (occurrences.isEmpty) List(List())
+    else null
+  }
 
   /** Subtracts occurrence list `y` from occurrence list `x`.
    *
@@ -100,7 +108,10 @@ object Anagrams extends AnagramsInterface:
    *  Note: the resulting value is an occurrence - meaning it is sorted
    *  and has no zero-entries.
    */
-  def subtract(x: Occurrences, y: Occurrences): Occurrences = ???
+  def subtract(x: Occurrences, y: Occurrences): Occurrences = {
+    x.toMap.toList
+    y.toMap.toList
+  }
 
   /** Returns a list of all anagram sentences of the given sentence.
    *
