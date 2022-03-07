@@ -88,14 +88,34 @@ object Anagrams extends AnagramsInterface:
    *  Note that the order of the occurrence list subsets does not matter -- the subsets
    *  in the example above could have been displayed in some other order.
    */
-  //todo generate all possibilities from new occurence
+
   def combinations(occurrences: Occurrences): List[Occurrences] = {
 
     def genPossibles(c: Char, nc: Int): List[List[(Char, Int)]] =
       (for (i <- 1 to nc) yield (c, i)).toList.map(x=>List(x))
 
+    def chooseOccFromLetter(toChooseFrom: (Char, Int))(choices: List[Occurrences]): List[Occurrences] = {
+      val (temp1, temp2) = toChooseFrom
+      val futurPossibles = genPossibles(temp1, temp2)
+      if (choices.isEmpty) futurPossibles
+      else {
+        choices:::(for (choice <- choices; futurPossible <- futurPossibles) yield choice ::: futurPossible):::futurPossibles
+      }
+    }
+
+    def chackOccurrences(curSol: List[Occurrences], remainingOcc: Occurrences): List[Occurrences] = {
+
+      if (remainingOcc.isEmpty) {
+        curSol
+      }
+      else{
+        chackOccurrences(chooseOccFromLetter(remainingOcc.head)(curSol),remainingOcc.tail):::List(List())
+      }
+    }
+
     if (occurrences.isEmpty) List(List())
-    else null
+    else
+      chackOccurrences(List(), occurrences)
   }
 
   /** Subtracts occurrence list `y` from occurrence list `x`.
